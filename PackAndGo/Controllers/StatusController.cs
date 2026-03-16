@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PackAndGo.DTOs;
 using PackAndGo.Services.Interfaces;
@@ -19,6 +19,11 @@ namespace PackAndGo.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStatus([FromQuery] string bookingCode)
         {
+            if (string.IsNullOrWhiteSpace(bookingCode))
+            {
+                return BadRequest("bookingCode is required.");
+            }
+                
             try
             {
                 var result = await _statusService.CheckStatusAsync(new CheckStatusReq { BookingCode = bookingCode });
