@@ -27,6 +27,6 @@ All endpoints require an Authorization header with the API key:
 Authorization: test-api-key
 
 ## Endpoints
-POST /api/Search - Search for available holiday options
-POST /api/Booking - Book a selected option         
-GET /api/Status?bookingCode={bookingCode} - Check the status of a booking 
+- POST /api/Search - Search for available holiday options
+- POST /api/Booking - Book a selected option         
+- GET /api/Status?bookingCode={bookingCode} - Check the status of a booking
