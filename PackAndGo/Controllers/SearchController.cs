@@ -18,15 +18,8 @@ namespace PackAndGo.Controllers
         [HttpPost]
         public async Task<IActionResult> Search([FromBody] SearchReq request)
         {
-            try
-            {
                 var result = await _searchTypeService.SearchTypeAsync(request);
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message }); 
-            }
         }
     }
 }

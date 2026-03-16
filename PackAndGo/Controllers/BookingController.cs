@@ -18,15 +18,8 @@ namespace PackAndGo.Controllers
         [HttpPost]
         public async Task<IActionResult> Book([FromBody] BookReq request)
         {
-            try
-            {
                 var result = await _bookingService.BookAsync(request);
-                return Ok(result);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(result);
         }
     }
 }
