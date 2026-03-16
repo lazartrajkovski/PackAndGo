@@ -18,7 +18,7 @@ namespace PackAndGo.Controllers
         [HttpPost]
         public async Task<IActionResult> Book([FromBody] BookReq request)
         {
-                var result = await _bookingService.BookAsync(request);
+            var result = await _bookingService.BookAsync(request);
             return Ok(result);
         }
     }
