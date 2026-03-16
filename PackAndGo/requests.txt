@@ -1,0 +1,61 @@
+﻿API Requests Example
+
+Note: Add the Authorization Header before making any call.
+      Replace {localHostUrl} with your base URL
+
+SEARCH
+
+Hotel And Flight
+POST {localHostUrl}/Search
+Headers:Authorization: test-api-key
+Content-Type: application/json
+
+Body:
+{
+  "destination": "SKP",
+  "departureAirport": "CPH",
+  "fromDate": "2026-06-01T00:00:00.000Z",
+  "toDate": "2026-06-15T00:00:00.000Z"
+}
+
+Response: 
+{
+    "options": [
+        {
+            "optionCode": "60f4e57e-4421-477c-bad5-09295eaed542",
+            "hotelCode": "8626",
+            "flightCode": "306",
+            "arrivalAirport": "SKP",
+            "price": 2501.35,
+            "fromDate": "2026-06-01T00:00:00Z"
+        }
+}
+
+BOOKING
+
+POST {localHostUrl}/Booking
+Headers:Authorization: test-api-key
+Content-Type: application/json
+
+Body:
+{
+  "optionCode": "60f4e57e-4421-477c-bad5-09295eaed542"
+}
+
+Response:
+{
+    "bookingCode": "7OlIJs",
+    "bookingTime": "2026-03-15T23:26:38.4183542Z"
+}
+
+CHECK STATUS
+
+GET {localHostUrl}/Status?bookingCode=7OlIJs
+Headers:
+Headers:Authorization: test-api-key
+Content-Type: application/json
+
+Response:
+{
+    "bookingStatus": "Success"
+}

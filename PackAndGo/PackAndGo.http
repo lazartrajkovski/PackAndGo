@@ -1,0 +1,6 @@
+@PackAndGo_HostAddress = http://localhost:5193
+
+GET {{PackAndGo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
