@@ -1,4 +1,6 @@
-﻿namespace PackAndGo.Middlewares
+using PackAndGo.Exceptions;
+
+namespace PackAndGo.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
@@ -21,12 +23,22 @@
             {
                 _logger.LogError(ex, "Unhandled exception occurred");
 
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
+                context.Response.StatusCode = ex switch
+                {
+                    AppException => StatusCodes.Status400BadRequest,
+                    KeyNotFoundException => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status500InternalServerError
+                };
 
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    message = "An unexpected error occurred."
+                    message = ex switch
+                    {
+                        AppException => ex.Message,
+                        KeyNotFoundException => ex.Message,
+                        _ => "An unexpected error occurred."
+                    }
                 });
             }
         }

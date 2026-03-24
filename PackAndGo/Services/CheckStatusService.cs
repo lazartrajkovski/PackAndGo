@@ -1,4 +1,5 @@
-﻿using PackAndGo.DTOs;
+using PackAndGo.DTOs;
+using PackAndGo.Exceptions;
 using PackAndGo.Repositories.Interfaces;
 using PackAndGo.Services.Interfaces;
 
@@ -18,26 +19,16 @@ namespace PackAndGo.Services
             var booking = _bookingRepository.GetBooking(request.BookingCode);
 
             if (booking == null)
-            {
-                throw new KeyNotFoundException("Booking not found!");
-            }
-            else
-            {
-                var completionTime = booking.BookingTime.AddSeconds(booking.SleepTime);
+                throw new AppException("Booking not found!");
 
-                if (DateTime.UtcNow < completionTime)
-                {
-                    return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Pending });
-                } 
-                else if (booking.FromDate <= DateTime.UtcNow.AddDays(45))
-                {
-                    return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Failed });
-                }
-                else
-                {
-                    return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Success });
-                }
-            }
+            var completionTime = booking.BookingTime.AddSeconds(booking.SleepTime);
+
+            if (DateTime.UtcNow < completionTime)
+                return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Pending });
+            else if (booking.FromDate <= DateTime.UtcNow.AddDays(45))
+                return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Failed });
+            else
+                return Task.FromResult(new CheckStatusRes { BookingStatus = Enums.BookingStatus.Success });
         }
     }
 }

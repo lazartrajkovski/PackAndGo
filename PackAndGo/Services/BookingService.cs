@@ -1,4 +1,5 @@
-﻿using PackAndGo.DTOs;
+using PackAndGo.DTOs;
+using PackAndGo.Exceptions;
 using PackAndGo.Models;
 using PackAndGo.Repositories.Interfaces;
 using PackAndGo.Services.Interfaces;
@@ -16,29 +17,24 @@ namespace PackAndGo.Services
 
         public async Task<BookRes> BookAsync(BookReq request)
         {
-            if (!string.IsNullOrEmpty(request.OptionCode))
+            var option = _bookingRepository.GetOption(request.OptionCode);
+
+            if (option == null)
+                throw new AppException("Option not found!");
+
+            var newBooking = new Booking()
             {
-                var option = _bookingRepository.GetOption(request.OptionCode);
+                BookingTime = DateTime.UtcNow,
+                FromDate = option.FromDate
+            };
 
-                var newBooking = new Booking()
-                {
-                    BookingTime = DateTime.UtcNow,
-                    FromDate = option.FromDate
-                };
+            _bookingRepository.SaveBooking(newBooking);
 
-
-                _bookingRepository.SaveBooking(newBooking);
-
-                return new BookRes
-                { 
-                    BookingCode = newBooking.BookingCode,
-                    BookingTime = newBooking.BookingTime
-                };
-            }
-            else
+            return new BookRes
             {
-                throw new ArgumentException("OptionCode cannot be null or empty.");
-            }
+                BookingCode = newBooking.BookingCode,
+                BookingTime = newBooking.BookingTime
+            };
         }
     }
 }
